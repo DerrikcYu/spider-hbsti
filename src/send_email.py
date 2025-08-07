@@ -2,25 +2,22 @@ import smtplib
 from email.mime.text import MIMEText
 from email.utils import formataddr
 
-SEND_MAIL=True
-
+# SEND_MAIL=True
+SEND_MAIL=False
 class SendMailToMe(object):
     def process_item(self,item):
         content_html = ''
+        content = ''
         for p in item['noticeContent']:
             content_html = content_html + '<p>' + p + '</p>'
         if SEND_MAIL:
             sender = "yancy2017@163.com"
             password = "BJT5dtpivf7XB4XW"
             receiver = '1347610023@qq.com'
-            title=item['noticeTitle']
-            content="""
-                    <p>%s<p>
-                    <p><a href="%s">%s</a></p>
-                    <p>%s</p>
-                    %s
-                    """%(item['noticeType'], item['noticeUrl'], item['noticeTitle'], item['noticeDate'], content_html)
-            # print('邮件内容',content)
+            title = '科技政策资讯'
+            for i in range(len(item['noticeTitle'])):
+                content = content + """<p>%s<p><p><a href="%s">%s</a></p><p>%s</p>%s"""%(item['noticeType'][i],item['noticeUrl'][i], item['noticeTitle'][i], item['noticeDate'][i], content_html)
+                # print('邮件内容',content)
             ret=self.sendMail(sender,password,receiver,title,content)
             print('================',ret)
             if ret:
